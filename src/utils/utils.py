@@ -40,50 +40,16 @@ def learn_docids(dataset, model, max_epochs, batch_size=1024, **dataloader_kwarg
     trainer.fit(model, dataloader)
 
 
-# def plot_pl_logs(log_dir, metric, save_dir):
-#     # Create save directory if it doesn't exist
-#     if not os.path.exists(save_dir):
-#         os.makedirs(save_dir)
-
-#     # Capitalize metric name
-#     metric_str = ' '.join(word.capitalize() for word in metric.split('_'))
-
-#     # Find the event file in the log directory
-#     event_file = next(file for file in os.listdir(log_dir) if 'events.out.tfevents' in file)
-#     full_path = os.path.join(log_dir, event_file)
-
-#     # Load the TensorBoard event file
-#     ea = event_accumulator.EventAccumulator(full_path)
-#     ea.Reload()
-
-#     # Extracting the scalar 'loss'
-#     if metric in ea.scalars.Keys():
-#         metric_df = pd.DataFrame(ea.scalars.Items(metric))
-
-#         # Plotting
-#         plt.figure(figsize=(6, 4))
-#         plt.plot(metric_df['step'], metric_df['value'], label=f'{metric_str}')
-#         plt.xlabel('Steps')
-#         plt.ylabel(f'{metric_str}')
-#         plt.title(f'{metric_str} Over Time')
-#         plt.savefig(os.path.join(save_dir, f'{metric}.pdf'), bbox_inches='tight')
-#     else:
-#         print(f"{metric} data not found in logs")
-
 def plot_pl_logs(log_dir, metric, save_dir):
     # Create save directory if it doesn't exist
-    os.makedirs(save_dir, exist_ok=True)
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
 
     # Capitalize metric name
     metric_str = ' '.join(word.capitalize() for word in metric.split('_'))
 
     # Find the event file in the log directory
-    try:
-        event_file = next(file for file in os.listdir(log_dir) if 'events.out.tfevents' in file)
-    except StopIteration:
-        print(f"No event files found in directory {log_dir}")
-        return
-
+    event_file = next(file for file in os.listdir(log_dir) if 'events.out.tfevents' in file)
     full_path = os.path.join(log_dir, event_file)
 
     # Load the TensorBoard event file
